@@ -70,6 +70,10 @@ const ArrAction = (props: ArrActionProps) => {
           name: 'Delete',
         },
         {
+          id: 5,
+          name: 'Archive',
+        },
+        {
           id: 4,
           name: 'Do nothing',
         },

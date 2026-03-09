@@ -220,6 +220,7 @@ export class JellyfinMapper {
       parentIndex: item.ParentIndexNumber || undefined,
       collections: undefined, // Need to query separately
       labels: item.Tags || undefined,
+      path: item.Path || undefined,
     };
   }
 

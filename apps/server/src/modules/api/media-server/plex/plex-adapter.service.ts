@@ -1,3 +1,4 @@
+import * as path from 'path';
 import {
   CollectionVisibilitySettings,
   CreateCollectionParams,
@@ -337,6 +338,23 @@ export class PlexAdapterService implements IMediaServerService {
     const playlists = await this.plexApi.getPlaylists(libraryId);
     if (!playlists) return [];
     return playlists.map(PlexMapper.toMediaPlaylist);
+  }
+
+  async getItemPath(itemId: string): Promise<string | undefined> {
+    const metadata = await this.plexApi.getMetadata(itemId);
+    if (!metadata) return undefined;
+
+    // Plex stores file path in Media[].Part[].file
+    const media = metadata.Media || metadata.media;
+    if (media && media.length > 0) {
+      const part = media[0]?.Part?.[0];
+      if (part?.file) {
+        // Return the directory containing the media file
+        return path.dirname(part.file);
+      }
+    }
+
+    return undefined;
   }
 
   async deleteFromDisk(itemId: string): Promise<void> {

@@ -76,4 +76,7 @@ export class Settings implements SettingDto {
 
   @Column({ nullable: false, default: CronExpression.EVERY_8_HOURS })
   rules_handler_job_cron: string;
+
+  @Column({ nullable: true, default: null })
+  archive_path: string;
 }
