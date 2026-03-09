@@ -8,6 +8,7 @@ import {
 } from '@jellyfin/sdk/lib/generated-client/models';
 import {
   getCollectionApi,
+  getItemRefreshApi,
   getItemsApi,
   getItemUpdateApi,
   getLibraryApi,
@@ -1252,6 +1253,26 @@ export class JellyfinAdapterService implements IMediaServerService {
     } else {
       // Clear all Jellyfin cache
       this.cache.data.flushAll();
+    }
+  }
+
+  async refreshLibrary(libraryId: string): Promise<void> {
+    if (!this.api) {
+      throw new Error(
+        'Jellyfin API not initialized — cannot refresh library',
+      );
+    }
+
+    try {
+      await getItemRefreshApi(this.api).refreshItem({ itemId: libraryId });
+      this.logger.log(
+        `Successfully triggered library scan for Jellyfin library ${libraryId}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to trigger library scan for Jellyfin library ${libraryId}`,
+        error,
+      );
     }
   }
 
