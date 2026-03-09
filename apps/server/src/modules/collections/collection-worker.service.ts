@@ -16,6 +16,7 @@ import { SettingsService } from '../settings/settings.service';
 import { ExecutionLockService } from '../tasks/execution-lock.service';
 import { TaskBase } from '../tasks/task.base';
 import { TasksService } from '../tasks/tasks.service';
+import { MediaServerFactory } from '../api/media-server/media-server.factory';
 import { CollectionHandler } from './collection-handler';
 import { CollectionsService } from './collections.service';
 import { Collection } from './entities/collection.entities';
@@ -40,6 +41,7 @@ export class CollectionWorkerService extends TaskBase {
     private readonly collectionsService: CollectionsService,
     protected readonly logger: MaintainerrLogger,
     private readonly executionLock: ExecutionLockService,
+    private readonly mediaServerFactory: MediaServerFactory,
   ) {
     logger.setContext(CollectionWorkerService.name);
     super(taskService, logger);
@@ -178,6 +180,29 @@ export class CollectionWorkerService extends TaskBase {
       }
 
       if (handledCollectionMedia > 0) {
+        // Trigger library scan for all affected libraries
+        try {
+          const affectedLibraryIds = [
+            ...new Set(
+              collectionHandleMediaGroup
+                .filter((g) => g.mediaToHandle.length > 0)
+                .map((g) => g.collection.libraryId),
+            ),
+          ];
+
+          if (affectedLibraryIds.length > 0) {
+            const mediaServer = await this.mediaServerFactory.getService();
+            for (const libraryId of affectedLibraryIds) {
+              await mediaServer.refreshLibrary(libraryId);
+            }
+            this.infoLogger(
+              `Triggered library scan for ${affectedLibraryIds.length} affected library/libraries`,
+            );
+          }
+        } catch (err) {
+          this.logger.error(`Failed to trigger library scan`, err);
+        }
+
         if (this.settings.seerrConfigured()) {
           await delay(7000, async () => {
             try {

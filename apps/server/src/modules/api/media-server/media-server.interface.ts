@@ -240,4 +240,10 @@ export interface IMediaServerService {
    * @param itemId - If provided, only reset cache for this item. Otherwise reset all.
    */
   resetMetadataCache(itemId?: string): void;
+
+  /**
+   * Trigger a library scan/refresh on the media server.
+   * @param libraryId - The library to refresh
+   */
+  refreshLibrary(libraryId: string): Promise<void>;
 }

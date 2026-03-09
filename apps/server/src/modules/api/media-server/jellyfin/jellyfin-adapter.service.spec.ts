@@ -66,6 +66,9 @@ jest.mock('@jellyfin/sdk/lib/utils/api/index.js', () => ({
     getUserById: jest.fn(),
   }),
   getCollectionApi: jest.fn(),
+  getItemRefreshApi: jest.fn().mockReturnValue({
+    refreshItem: jest.fn().mockResolvedValue({}),
+  }),
   getSearchApi: jest.fn(),
   getPlaylistsApi: jest.fn(),
   getUserViewsApi: jest.fn(),

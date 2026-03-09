@@ -1063,6 +1063,23 @@ export class PlexApiService {
     }
   }
 
+  public async refreshLibrary(libraryId: string): Promise<void> {
+    try {
+      await this.plexClient.query({
+        uri: `/library/sections/${libraryId}/refresh`,
+        method: 'get',
+      });
+      this.logger.log(
+        `[Plex] Triggered library scan for library ${libraryId}`,
+      );
+    } catch (err) {
+      this.logger.error(
+        `[Plex] Failed to trigger library scan for library ${libraryId}`,
+        err,
+      );
+    }
+  }
+
   private async forceMachineId() {
     if (!this.machineId) {
       await this.setMachineId();

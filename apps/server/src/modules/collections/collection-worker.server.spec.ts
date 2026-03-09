@@ -5,6 +5,8 @@ import {
   createCollection,
   createCollectionMedia,
 } from '../../../test/utils/data';
+import { MediaServerFactory } from '../api/media-server/media-server.factory';
+import { IMediaServerService } from '../api/media-server/media-server.interface';
 import { SeerrApiService } from '../api/seerr-api/seerr-api.service';
 import { SettingsService } from '../settings/settings.service';
 import { ExecutionLockService } from '../tasks/execution-lock.service';
@@ -26,6 +28,7 @@ describe('CollectionWorkerService', () => {
   let seerrApi: Mocked<SeerrApiService>;
   let collectionHandler: Mocked<CollectionHandler>;
   let executionLock: Mocked<ExecutionLockService>;
+  let mediaServerFactory: Mocked<MediaServerFactory>;
 
   beforeEach(async () => {
     const { unit, unitRef } = await TestBed.solitary(
@@ -44,8 +47,12 @@ describe('CollectionWorkerService', () => {
     seerrApi = unitRef.get(SeerrApiService);
     collectionHandler = unitRef.get(CollectionHandler);
     executionLock = unitRef.get(ExecutionLockService);
+    mediaServerFactory = unitRef.get(MediaServerFactory);
 
     executionLock.acquire.mockResolvedValue(jest.fn());
+    mediaServerFactory.getService.mockResolvedValue({
+      refreshLibrary: jest.fn().mockResolvedValue(undefined),
+    } as unknown as IMediaServerService);
   });
 
   it('should abort if another instance is running', async () => {

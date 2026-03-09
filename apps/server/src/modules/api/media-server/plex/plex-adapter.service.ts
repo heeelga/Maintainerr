@@ -393,4 +393,8 @@ export class PlexAdapterService implements IMediaServerService {
     // Note: PlexApiService doesn't support full cache flush through this method
     // Only individual item cache reset is supported
   }
+
+  async refreshLibrary(libraryId: string): Promise<void> {
+    await this.plexApi.refreshLibrary(libraryId);
+  }
 }
