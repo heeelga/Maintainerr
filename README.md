@@ -37,7 +37,7 @@ It's a one-stop-shop for handling those outlying shows and movies that take up p
 - Manage media straight from the collection within your media server. <b>Maintainerr</b> will sync and add or exclude media to/from the internal collection.
 - Remove or unmonitor media from \*arr
 - Clear requests from Seerr
-- Delete files from disk
+- Delete files from disk or archive them to a specified folder
 
 <br />
 Currently, <b>Maintainerr</b> supports rule parameters from these apps :
@@ -75,7 +75,7 @@ docker run -d \
 -u 1000:1000 \
 -p 6246:6246 \
 --restart unless-stopped \
-ghcr.io/maintainerr/maintainerr:latest
+ghcr.io/heeelga/maintainerr:latest
 ```
 
 Docker-compose:
@@ -83,10 +83,11 @@ Docker-compose:
 ```Yaml
 services:
     maintainerr:
-        image: ghcr.io/maintainerr/maintainerr:latest # or maintainerr/maintainerr:latest
+        image: ghcr.io/heeelga/maintainerr:latest # or maintainerr/maintainerr:latest
         container_name: maintainerr
         user: 1000:1000
         volumes:
+          - /path_to_local_archive:/archive
           - type: bind
             source: ./data
             target: /opt/data
