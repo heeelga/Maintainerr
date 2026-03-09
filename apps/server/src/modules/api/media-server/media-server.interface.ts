@@ -215,6 +215,12 @@ export interface IMediaServerService {
   deleteFromDisk(itemId: string): Promise<void>;
 
   /**
+   * Get the filesystem path of a media item.
+   * Returns the path where the media files are stored on disk.
+   */
+  getItemPath(itemId: string): Promise<string | undefined>;
+
+  /**
    * Get all media server IDs for a context action (add/remove from collection).
    * Handles show→season→episode traversal based on collection type.
    *

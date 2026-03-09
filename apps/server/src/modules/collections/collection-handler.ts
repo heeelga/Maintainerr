@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ArchiveActionHandler } from '../actions/archive-action-handler';
 import { RadarrActionHandler } from '../actions/radarr-action-handler';
 import { SonarrActionHandler } from '../actions/sonarr-action-handler';
 import { MediaServerFactory } from '../api/media-server/media-server.factory';
@@ -20,6 +21,7 @@ export class CollectionHandler {
     private readonly settings: SettingsService,
     private readonly radarrActionHandler: RadarrActionHandler,
     private readonly sonarrActionHandler: SonarrActionHandler,
+    private readonly archiveActionHandler: ArchiveActionHandler,
     private readonly logger: MaintainerrLogger,
   ) {
     logger.setContext(CollectionHandler.name);
@@ -62,7 +64,9 @@ export class CollectionHandler {
 
     await this.collectionService.saveCollection(collection);
 
-    if (library?.type === 'movie' && collection.radarrSettingsId) {
+    if (collection.arrAction === ServarrAction.ARCHIVE) {
+      await this.archiveActionHandler.handleAction(collection, media);
+    } else if (library?.type === 'movie' && collection.radarrSettingsId) {
       await this.radarrActionHandler.handleAction(collection, media);
     } else if (library?.type == 'show' && collection.sonarrSettingsId) {
       await this.sonarrActionHandler.handleAction(collection, media);

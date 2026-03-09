@@ -48,4 +48,6 @@ export class SettingDto {
   collection_handler_job_cron: string;
 
   rules_handler_job_cron: string;
+
+  archive_path?: string;
 }

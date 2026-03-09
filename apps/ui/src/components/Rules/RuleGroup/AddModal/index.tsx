@@ -715,6 +715,10 @@ const AddModal = (props: AddModal) => {
                           name: 'Unmonitor and keep files',
                         },
                         {
+                          id: 5,
+                          name: 'Archive',
+                        },
+                        {
                           id: 4,
                           name: 'Do nothing',
                         },
@@ -794,6 +798,10 @@ const AddModal = (props: AddModal) => {
                                   name: 'Unmonitor show and keep files',
                                 },
                                 {
+                                  id: 5,
+                                  name: 'Archive',
+                                },
+                                {
                                   id: 4,
                                   name: 'Do nothing',
                                 },
@@ -813,6 +821,10 @@ const AddModal = (props: AddModal) => {
                                     name: 'Unmonitor season and keep files',
                                   },
                                   {
+                                    id: 5,
+                                    name: 'Archive',
+                                  },
+                                  {
                                     id: 4,
                                     name: 'Do nothing',
                                   },
@@ -826,6 +838,10 @@ const AddModal = (props: AddModal) => {
                                   {
                                     id: 3,
                                     name: 'Unmonitor and keep file',
+                                  },
+                                  {
+                                    id: 5,
+                                    name: 'Archive',
                                   },
                                   {
                                     id: 4,

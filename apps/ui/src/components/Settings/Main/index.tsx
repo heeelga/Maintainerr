@@ -12,6 +12,7 @@ import MediaServerSelector from '../MediaServerSelector'
 const MainSettings = () => {
   const hostnameRef = useRef<HTMLInputElement>(null)
   const apiKeyRef = useRef<HTMLInputElement>(null)
+  const archivePathRef = useRef<HTMLInputElement>(null)
   const [missingValuesError, setMissingValuesError] = useState<boolean>()
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const { settings } = useSettingsOutletContext()
@@ -25,10 +26,14 @@ const MainSettings = () => {
     e.preventDefault()
     setMissingValuesError(false)
     if (hostnameRef.current?.value && apiKeyRef.current?.value) {
-      const payload = {
+      const payload: Record<string, string | null> = {
         applicationUrl: hostnameRef.current.value,
         apikey: apiKeyRef.current.value,
       }
+
+      // Include archive_path (empty string → null to clear)
+      const archivePath = archivePathRef.current?.value?.trim()
+      payload.archive_path = archivePath || null
 
       await updateSettings(payload)
     } else {
@@ -109,6 +114,28 @@ const MainSettings = () => {
                 </div>
               </div>
             </div>
+            <div className="form-row">
+              <label htmlFor="archive-path" className="text-label">
+                Archive Path
+                <p className="text-xs font-normal">
+                  Directory where media files are moved when using the Archive
+                  action. Leave empty to disable archiving.
+                </p>
+              </label>
+              <div className="form-input">
+                <div className="form-input-field">
+                  <input
+                    name="archive-path"
+                    id="archive-path"
+                    type="text"
+                    ref={archivePathRef}
+                    placeholder="/mnt/archive/media"
+                    defaultValue={settings.archive_path ?? ''}
+                  ></input>
+                </div>
+              </div>
+            </div>
+
             <div className="actions mt-5 w-full">
               <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap items-center gap-2">

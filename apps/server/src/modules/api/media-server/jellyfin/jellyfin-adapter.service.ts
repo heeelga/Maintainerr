@@ -1,3 +1,4 @@
+import * as nodePath from 'path';
 import { Jellyfin, type Api } from '@jellyfin/sdk';
 import {
   BaseItemKind,
@@ -1233,6 +1234,16 @@ export class JellyfinAdapterService implements IMediaServerService {
       this.logger.error(`Failed to delete item ${itemId} from disk`, error);
       throw error;
     }
+  }
+
+  async getItemPath(itemId: string): Promise<string | undefined> {
+    const metadata = await this.getMetadata(itemId);
+    if (!metadata?.path) return undefined;
+
+    // Jellyfin Path can be a file or directory depending on media type.
+    // For consistency, return the containing directory.
+    const ext = nodePath.extname(metadata.path);
+    return ext ? nodePath.dirname(metadata.path) : metadata.path;
   }
 
   resetMetadataCache(itemId?: string): void {
