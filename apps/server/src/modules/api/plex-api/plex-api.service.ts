@@ -1065,10 +1065,9 @@ export class PlexApiService {
 
   public async refreshLibrary(libraryId: string): Promise<void> {
     try {
-      await this.plexClient.query({
-        uri: `/library/sections/${libraryId}/refresh`,
-        method: 'get',
-      });
+      await this.plexClient.query(
+        `/library/sections/${libraryId}/refresh`,
+      );
       this.logger.log(
         `[Plex] Triggered library scan for library ${libraryId}`,
       );
