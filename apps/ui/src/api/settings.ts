@@ -49,6 +49,8 @@ interface ISettings {
   collection_handler_job_cron: string
   rules_handler_job_cron: string
   archive_path?: string
+  archive_source_path_prefix?: string
+  archive_target_path_prefix?: string
 }
 
 // Jellyfin test result (not in contracts as it's UI-specific)

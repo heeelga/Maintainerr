@@ -13,6 +13,8 @@ const MainSettings = () => {
   const hostnameRef = useRef<HTMLInputElement>(null)
   const apiKeyRef = useRef<HTMLInputElement>(null)
   const archivePathRef = useRef<HTMLInputElement>(null)
+  const archiveSourcePrefixRef = useRef<HTMLInputElement>(null)
+  const archiveTargetPrefixRef = useRef<HTMLInputElement>(null)
   const [missingValuesError, setMissingValuesError] = useState<boolean>()
   const [showDownloadModal, setShowDownloadModal] = useState(false)
   const { settings } = useSettingsOutletContext()
@@ -31,9 +33,13 @@ const MainSettings = () => {
         apikey: apiKeyRef.current.value,
       }
 
-      // Include archive_path (empty string → null to clear)
+      // Include archive settings (empty string → null to clear)
       const archivePath = archivePathRef.current?.value?.trim()
       payload.archive_path = archivePath || null
+      const sourcePrefix = archiveSourcePrefixRef.current?.value?.trim()
+      payload.archive_source_path_prefix = sourcePrefix || null
+      const targetPrefix = archiveTargetPrefixRef.current?.value?.trim()
+      payload.archive_target_path_prefix = targetPrefix || null
 
       await updateSettings(payload)
     } else {
@@ -131,6 +137,42 @@ const MainSettings = () => {
                     ref={archivePathRef}
                     placeholder="/mnt/archive/media"
                     defaultValue={settings.archive_path ?? ''}
+                  ></input>
+                </div>
+              </div>
+            </div>
+            <div className="form-row">
+              <label htmlFor="archive-source-prefix" className="text-label">
+                Archive Path Mapping
+                <p className="text-xs font-normal">
+                  Map media server paths to container paths. E.g. if Jellyfin
+                  sees files at /media/Video but they are mounted at /mnt/media
+                  in this container.
+                </p>
+              </label>
+              <div className="form-input">
+                <div className="form-input-field flex gap-2">
+                  <input
+                    name="archive-source-prefix"
+                    id="archive-source-prefix"
+                    type="text"
+                    ref={archiveSourcePrefixRef}
+                    placeholder="Media server path, e.g. /media/Video"
+                    defaultValue={
+                      settings.archive_source_path_prefix ?? ''
+                    }
+                  ></input>
+                </div>
+                <div className="form-input-field mt-2 flex gap-2">
+                  <input
+                    name="archive-target-prefix"
+                    id="archive-target-prefix"
+                    type="text"
+                    ref={archiveTargetPrefixRef}
+                    placeholder="Container path, e.g. /mnt/media"
+                    defaultValue={
+                      settings.archive_target_path_prefix ?? ''
+                    }
                   ></input>
                 </div>
               </div>
