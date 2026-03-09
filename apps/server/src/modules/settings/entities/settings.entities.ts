@@ -78,5 +78,5 @@ export class Settings implements SettingDto {
   rules_handler_job_cron: string;
 
   @Column({ nullable: true, default: null })
-  archive_path: string;
+  archive_path?: string;
 }
