@@ -83,6 +83,10 @@ export class SettingsService implements SettingDto {
 
   archive_path?: string;
 
+  archive_source_path_prefix?: string;
+
+  archive_target_path_prefix?: string;
+
   constructor(
     @Inject(forwardRef(() => PlexApiService))
     private readonly plexApi: PlexApiService,
@@ -137,6 +141,10 @@ export class SettingsService implements SettingDto {
         settingsDb?.collection_handler_job_cron;
       this.rules_handler_job_cron = settingsDb?.rules_handler_job_cron;
       this.archive_path = settingsDb?.archive_path;
+      this.archive_source_path_prefix =
+        settingsDb?.archive_source_path_prefix;
+      this.archive_target_path_prefix =
+        settingsDb?.archive_target_path_prefix;
 
       // Auto-detect media server type when not set but credentials exist.
       // This handles upgrades from pre-Jellyfin versions (Plex) and any future

@@ -115,12 +115,20 @@ const CollectionItem = (props: ICollectionItem) => {
 
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
-                Delete
+                {props.collection.arrAction === 5
+                  ? 'Archive'
+                  : props.collection.arrAction === 3
+                    ? 'Unmonitor'
+                    : props.collection.arrAction === 4
+                      ? 'Action'
+                      : 'Delete'}
               </p>
               <p className="text-amber-500">
-                {props.collection.deleteAfterDays == null
-                  ? 'Never'
-                  : `After ${props.collection.deleteAfterDays}d`}
+                {props.collection.arrAction === 4
+                  ? 'Do nothing'
+                  : props.collection.deleteAfterDays == null
+                    ? 'Never'
+                    : `After ${props.collection.deleteAfterDays}d`}
               </p>
             </div>
 

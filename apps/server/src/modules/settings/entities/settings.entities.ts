@@ -79,4 +79,10 @@ export class Settings implements SettingDto {
 
   @Column({ nullable: true, default: null })
   archive_path?: string;
+
+  @Column({ nullable: true, default: null })
+  archive_source_path_prefix?: string;
+
+  @Column({ nullable: true, default: null })
+  archive_target_path_prefix?: string;
 }

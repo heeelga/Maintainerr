@@ -31,13 +31,24 @@ export class ArchiveActionHandler {
     }
 
     const mediaServer = await this.mediaServerFactory.getService();
-    const itemPath = await mediaServer.getItemPath(media.mediaServerId);
+    let itemPath = await mediaServer.getItemPath(media.mediaServerId);
 
     if (!itemPath) {
       this.logger.error(
         `Could not determine filesystem path for media ${media.mediaServerId}. No archive action taken.`,
       );
       return;
+    }
+
+    // Apply path mapping if configured (media server path → container path)
+    const sourcePrefix = this.settings.archive_source_path_prefix;
+    const targetPrefix = this.settings.archive_target_path_prefix;
+    if (sourcePrefix && targetPrefix && itemPath.startsWith(sourcePrefix)) {
+      const originalPath = itemPath;
+      itemPath = targetPrefix + itemPath.slice(sourcePrefix.length);
+      this.logger.log(
+        `Path mapping applied: '${originalPath}' → '${itemPath}'`,
+      );
     }
 
     try {
