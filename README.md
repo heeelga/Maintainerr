@@ -1,6 +1,16 @@
-<p align="center">
-  <img src="apps/ui/public/logo_black.svg?raw=true" alt="Maintainerr's custom image"/>
-</p>
+## Disclaimer
+
+This repository is a fork of the original **maintainerr/maintainerr** project.
+
+I created this fork solely to experiment with and implement a feature that allows **archiving media instead of permanently deleting it**. The goal was to keep media files in an archive location rather than removing them entirely.
+
+Please note that **I am not a programmer**. The modifications in this repository were primarily implemented with the help of **Claude (AI)**. My role was mainly to guide the implementation and test the results.
+
+Because of this, the code may not follow best practices and should be considered **experimental**. Use it at your own risk.
+
+All credit for the original project and the vast majority of the code goes to the maintainers and contributors of the original repository:
+https://github.com/maintainerr/maintainerr
+
 
 <p align="center" >
 <!-- Discord Badge -->  <a href="https://discord.gg/WP4ZW2QYwk"><img alt="Discord" src="https://img.shields.io/discord/1152219249549512724?style=flat&logo=discord&logoColor=white&label=Maintainerr"></a>
@@ -87,6 +97,7 @@ services:
         container_name: maintainerr
         user: 1000:1000
         volumes:
+          - /path_to_local_media:/media
           - /path_to_local_archive:/archive
           - type: bind
             source: ./data
