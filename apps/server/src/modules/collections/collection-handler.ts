@@ -66,6 +66,12 @@ export class CollectionHandler {
 
     if (collection.arrAction === ServarrAction.ARCHIVE) {
       await this.archiveActionHandler.handleAction(collection, media);
+      // After archiving files, also inform *arr to remove the entry (without deleting files)
+      if (library?.type === 'movie' && collection.radarrSettingsId) {
+        await this.radarrActionHandler.handleAction(collection, media);
+      } else if (library?.type === 'show' && collection.sonarrSettingsId) {
+        await this.sonarrActionHandler.handleAction(collection, media);
+      }
     } else if (library?.type === 'movie' && collection.radarrSettingsId) {
       await this.radarrActionHandler.handleAction(collection, media);
     } else if (library?.type == 'show' && collection.sonarrSettingsId) {

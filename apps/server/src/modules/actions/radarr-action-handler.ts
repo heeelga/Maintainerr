@@ -39,6 +39,16 @@ export class RadarrActionHandler {
       const radarrMedia = await radarrApiClient.getMovieByTmdbId(tmdbid);
       if (radarrMedia?.id) {
         switch (collection.arrAction) {
+          case ServarrAction.ARCHIVE:
+            await radarrApiClient.deleteMovie(
+              radarrMedia.id,
+              false, // files already moved by archive handler, don't delete them
+              collection.listExclusions,
+            );
+            this.logger.log(
+              `Removed movie with tmdb id ${tmdbid} from Radarr (files were archived)`,
+            );
+            break;
           case ServarrAction.DELETE:
           case ServarrAction.UNMONITOR_DELETE_EXISTING:
             await radarrApiClient.deleteMovie(

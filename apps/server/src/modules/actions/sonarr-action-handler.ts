@@ -102,6 +102,41 @@ export class SonarrActionHandler {
     }
 
     switch (collection.arrAction) {
+      case ServarrAction.ARCHIVE:
+        switch (collection.type) {
+          case 'season':
+            sonarrMedia = await sonarrApiClient.unmonitorSeasons(
+              sonarrMedia.id,
+              mediaData?.index,
+              false, // files already moved by archive handler, don't delete them
+            );
+            this.logger.log(
+              `[Sonarr] Unmonitored season ${mediaData?.index} from show '${sonarrMedia.title}' (files were archived)`,
+            );
+            break;
+          case 'episode':
+            await sonarrApiClient.UnmonitorDeleteEpisodes(
+              sonarrMedia.id,
+              mediaData?.parentIndex,
+              [mediaData?.index],
+              false, // files already moved by archive handler, don't delete them
+            );
+            this.logger.log(
+              `[Sonarr] Unmonitored episode ${mediaData?.index} of season ${mediaData?.parentIndex} from show '${sonarrMedia.title}' (files were archived)`,
+            );
+            break;
+          default:
+            await sonarrApiClient.deleteShow(
+              sonarrMedia.id,
+              false, // files already moved by archive handler, don't delete them
+              collection.listExclusions,
+            );
+            this.logger.log(
+              `[Sonarr] Removed show '${sonarrMedia.title}' from Sonarr (files were archived)`,
+            );
+            break;
+        }
+        break;
       case ServarrAction.DELETE:
         switch (collection.type) {
           case 'season':
